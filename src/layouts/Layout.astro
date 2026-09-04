@@ -1,0 +1,67 @@
+---
+import "@fontsource/fira-code"; // Defaults to weight 400
+import Header from "../components/Header.astro";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { description, title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Header />
+    <slot />
+  </body>
+</html>
+
+<script>
+  const buttonThemeBlue = document.querySelector("#btn1");
+  buttonThemeBlue?.addEventListener("click", () => {
+    changeBackgroundImage("/blue_wall.jpg");
+  });
+  const buttonRefBlue = document.querySelector("#btn2");
+  buttonRefBlue?.addEventListener("click", () => {
+    changeBackgroundImage("/ski.jpg");
+  });
+
+  function changeBackgroundImage(newImage: string) {
+    document.body.style.backgroundImage = `url(${newImage})`;
+  }
+</script>
+
+<style is:global>
+  :root {
+    color-scheme: light dark;
+  }
+  html {
+    font-family: "Fira Code", system-ui, sans-serif;
+  }
+
+  body {
+    background-color: #278d98;
+    background-image: url("/blue_wall.jpg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduce-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+</style>

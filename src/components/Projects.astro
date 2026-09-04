@@ -1,0 +1,47 @@
+---
+import IconApp from "./IconApp.astro";
+---
+
+<div
+  class="w-[400px] lg:w-[280px] lg:h-[405px] lg:mt-[25px] bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 text-white max-w-lg mx-auto flex-col items-start border border-transparent hover:border-gray-400 transition"
+>
+  <div
+    class="p-6 bg-black/10 backdrop-blur-lg h-1 flex items-center rounded-t-lg"
+  >
+    <h2 class="text-lg font-semibold text-white">Projects</h2>
+  </div>
+  <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4 justify-center">
+    <div class="flex flex-col items-center p-4 rounded-lg">
+      <IconApp
+        href="https://github.com/TutoryOrg/JWService"
+        src="calendar.png"
+        title="Expo + React Native App"
+      />
+      <p>Memento</p>
+    </div>
+    <div class="flex flex-col items-center p-4 rounded-lg">
+      <IconApp
+        href="https://github.com/TutoryOrg/JWTrivial"
+        src="trivial.png"
+        title="React Native App"
+      />
+      <p>Trivial</p>
+    </div>
+    <div class="flex flex-col items-center p-4 rounded-lg">
+      <IconApp
+        href="https://phuketacademy.onrender.com/"
+        src="logo.png"
+        title="Football Academy"
+      />
+      <p>TP_Academy</p>
+    </div>
+    <div class="flex flex-col items-center p-4 rounded-lg">
+      <IconApp
+        href="https://github.com/salcocer/react-native-maps"
+        src="taxi.png"
+        title="TaxiMap"
+      />
+      <p>TaxiMap</p>
+    </div>
+  </div>
+</div>

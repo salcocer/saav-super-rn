@@ -1,0 +1,14 @@
+---
+
+---
+
+<a
+  {...Astro.props}
+  class="hover:scale-110 transition max-w-[110px]"
+  target="_blank"
+  rel="noopener noreferrer"
+  title={Astro.props.title}
+>
+  <img src={Astro.props.src} alt="React" />
+  <slot />
+</a>

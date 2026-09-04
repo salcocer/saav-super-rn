@@ -1,0 +1,74 @@
+---
+import AboutMe from "../components/AboutMe.astro";
+import DownloadCV from "../components/DownloadCV.astro";
+import Education from "../components/Education.astro";
+import Experience from "../components/Experience.astro";
+import Profile from "../components/Profile.astro";
+import Projects from "../components/Projects.astro";
+import SocialPill from "../components/SocialPill.astro";
+import Technologies from "../components/Technologies.astro";
+
+import Email from "../icons/Email.astro";
+import Github from "../icons/Github.astro";
+import Linkedin from "../icons/Linkedin.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Portfolio saav - React Native Developer"
+  description="React Native/Expo Developer"
+>
+  <main class="mt-8 px-4">
+    <div
+      class="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-6 gap-4"
+    >
+      <div class="row-span-1 lg:row-span-2 flex justify-center">
+        <Profile class="w-full sm:w-[300px]" />
+      </div>
+      <div
+        class="col-span-1 sm:col-span-1 lg:col-span-2 lg:row-span-2 flex justify-center"
+      >
+        <Education class="w-full sm:w-[300px]" />
+      </div>
+      <div class="row-span-1 lg:row-span-4 lg:col-start-4 flex justify-center">
+        <AboutMe class="w-full sm:w-[300px]" />
+      </div>
+      <div
+        class="col-span-1 sm:col-span-1 lg:col-span-2 lg:row-span-2 flex justify-center"
+      >
+        <Technologies class="w-full sm:w-[300px]" />
+      </div>
+      <div class="row-span-2 lg:row-span-4 lg:row-start-3 flex justify-center">
+        <Projects class="w-full sm:w-[300px]" />
+      </div>
+      <div
+        class="col-span-1 sm:col-span-1 lg:col-span-4 lg:row-span-5 lg:col-start-2 lg:row-start-5 flex justify-center"
+      >
+        <Experience class="w-full sm:w-[300px]" />
+      </div>
+    </div>
+
+    <div
+      class="mt-8 mx-auto p-4 w-full max-w-sm bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-4 transition-transform duration-300 text-white flex flex-row items-center justify-between border border-transparent hover:border-gray-400"
+    >
+      <SocialPill href="https://github.com/salcocer" title="Github">
+        <Github class="w-8 h-8 sm:w-10 sm:h-10" />
+      </SocialPill>
+      <SocialPill
+        href="https://www.linkedin.com/in/alejandro-alcocer-250b21262/"
+        title="Linkedin"
+      >
+        <Linkedin class="w-8 h-8 sm:w-10 sm:h-10" />
+      </SocialPill>
+      <SocialPill href="mailto:alealcocer08@gmail.com" title="Email me">
+        <Email class="w-8 h-8 sm:w-10 sm:h-10" />
+      </SocialPill>
+      <SocialPill>
+        <DownloadCV
+          class="w-8 h-8 sm:w-10 sm:h-10"
+          fileUrl="Alejandro_CV.pdf"
+        />
+      </SocialPill>
+    </div>
+  </main>
+</Layout>

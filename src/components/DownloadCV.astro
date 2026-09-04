@@ -1,0 +1,20 @@
+---
+import Download from "../icons/Download.astro";
+---
+
+<button id="downCV" class="download-button" title="Download CV">
+  <Download class="w-10 h-10" />
+</button>
+
+<script>
+  const cv = "Alejandro_CV.pdf";
+  const buttonCV = document.querySelector("#downCV");
+  buttonCV?.addEventListener("click", () => {
+    const link = document.createElement("a");
+    link.href = cv;
+    link.download = cv.split("/").pop() as string;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+</script>
