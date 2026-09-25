@@ -1,9 +1,14 @@
 ---
 import IconApp from "./IconApp.astro";
+import Modal from "./Modal.astro";
 ---
 
 <div
-  class="m-auto lg:ml-[60px] w-[400px] w-[415px] h-fit bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 text-white flex-col items-start border border-transparent hover:border-gray-400 transition"
+  class="m-auto lg:ml-[60px] w-[400px] w-[415px] h-fit bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 text-white flex-col items-start border border-transparent hover:border-gray-400 transition cursor-pointer"
+  data-modal-target="technologies-modal"
+  role="button"
+  tabindex="0"
+  aria-haspopup="dialog"
 >
   <div
     class="p-6 bg-black/10 backdrop-blur-lg h-1 flex items-center rounded-t-lg"
@@ -26,3 +31,27 @@ import IconApp from "./IconApp.astro";
     <!-- <IconApp src="php.png" title="php" /> -->
   </div>
 </div>
+
+<Modal id="technologies-modal">
+  <div
+    class="p-6 bg-black/10 backdrop-blur-lg h-1 flex items-center rounded-t-lg"
+  >
+    <h2 class="text-lg font-semibold text-white">Technologies</h2>
+  </div>
+  <div class="p-6 flex-wrap flex justify-start gap-6">
+    <!-- <IconApp src="laravel.png" title="laravel" /> -->
+    <IconApp src="js.png" title="javascript" />
+    <IconApp src="typescript.png" title="typescript" />
+    <IconApp src="react.png" title="react" />
+    <IconApp src="redux.png" title="redux" />
+    <IconApp src="astro.png" title="astro" />
+    <IconApp src="cypress.png" title="cypress" />
+    <IconApp src="expo.png" title="expo" />
+    <!-- <IconApp src="styled.png" title="styled" /> -->
+    <IconApp src="threejs.png" title="threejs" />
+    <!-- <IconApp src="java.png" title="java" /> -->
+    <IconApp src="springboot.png" title="spring_boot" />
+    <!-- <IconApp src="php.png" title="php" /> -->
+  </div>
+  <!-- Add more details here (proficiency level, years used, etc.) -->
+</Modal>

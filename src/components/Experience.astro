@@ -1,9 +1,13 @@
 ---
-
+import Modal from "./Modal.astro";
 ---
 
 <div
-  class="m-auto w-[600px] lg:ml-[60px] lg:w-[695px] h-fit bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 text-white flex-col items-start border border-transparent hover:border-gray-400 transition"
+  class="m-auto w-[600px] lg:ml-[60px] lg:w-[695px] h-fit bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 text-white flex-col items-start border border-transparent hover:border-gray-400 transition cursor-pointer"
+  data-modal-target="experience-modal"
+  role="button"
+  tabindex="0"
+  aria-haspopup="dialog"
 >
   <div
     class="p-6 bg-black/10 backdrop-blur-lg h-1 flex items-center rounded-t-lg"
@@ -27,3 +31,40 @@
     </div>
   </div>
 </div>
+
+<Modal id="experience-modal" class="max-w-2xl">
+  <div
+    class="p-6 bg-black/10 backdrop-blur-lg h-1 flex items-center rounded-t-lg"
+  >
+    <h2 class="text-lg font-semibold text-white">Experience</h2>
+  </div>
+  <div class="p-6 flex flex-col gap-5">
+    <div>
+      <div class="flex flex-row justify-between">
+        <p class="text-md text-white">
+          · T-Systems, Barcelona - Mobile Developer
+        </p>
+        <p class="text-sm text-white italic">May 2022 - Present</p>
+      </div>
+      <!-- Add responsibilities/achievements for this role here -->
+    </div>
+    <div>
+      <div class="flex flex-row justify-between">
+        <p class="text-md text-white">
+          · Idrica, Valencia - FrontEnd Developer
+        </p>
+        <p class="text-sm text-white italic">April 2021 - May 2022</p>
+      </div>
+      <!-- Add responsibilities/achievements for this role here -->
+    </div>
+    <div>
+      <div class="flex flex-row justify-between">
+        <p class="text-md text-white">
+          · Pccom, Alicante - Mobile Developer
+        </p>
+        <p class="text-sm text-white italic">March 2019 - May 2021</p>
+      </div>
+      <!-- Add responsibilities/achievements for this role here -->
+    </div>
+  </div>
+</Modal>

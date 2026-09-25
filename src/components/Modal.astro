@@ -1,0 +1,36 @@
+---
+interface Props {
+  id: string;
+  class?: string;
+}
+
+const { id, class: className } = Astro.props;
+---
+
+<div
+  id={id}
+  data-modal
+  class="modal-overlay hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+>
+  <div
+    role="dialog"
+    aria-modal="true"
+    class={`relative w-full max-w-lg max-h-[85vh] overflow-y-auto bg-black/20 backdrop-blur-lg rounded-lg shadow-2xl text-white border border-transparent ${className ?? ""}`}
+  >
+    <button
+      type="button"
+      data-modal-close
+      aria-label="Close"
+      class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition text-lg leading-none"
+    >
+      &times;
+    </button>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .modal-overlay:not(.hidden) {
+    display: flex;
+  }
+</style>

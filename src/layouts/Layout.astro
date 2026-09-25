@@ -41,6 +41,55 @@ const { description, title } = Astro.props;
   }
 </script>
 
+<script>
+  function openModal(modal: HTMLElement) {
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    (modal.querySelector("[data-modal-close]") as HTMLElement | null)?.focus();
+  }
+
+  function closeModal(modal: HTMLElement) {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-modal-target]").forEach((trigger) => {
+    const targetId = trigger.getAttribute("data-modal-target");
+    const modal = targetId ? document.getElementById(targetId) : null;
+    if (!modal) return;
+
+    trigger.addEventListener("click", (event) => {
+      const clickedInsideNestedLink = (event.target as HTMLElement).closest("a, button");
+      if (clickedInsideNestedLink) return;
+      openModal(modal);
+    });
+
+    trigger.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openModal(modal);
+      }
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>("[data-modal]").forEach((modal) => {
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal(modal);
+    });
+
+    modal.querySelector("[data-modal-close]")?.addEventListener("click", () => {
+      closeModal(modal);
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    document.querySelectorAll<HTMLElement>("[data-modal]:not(.hidden)").forEach((modal) => {
+      closeModal(modal);
+    });
+  });
+</script>
+
 <style is:global>
   :root {
     color-scheme: light dark;
