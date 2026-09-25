@@ -43,14 +43,35 @@ const { description, title } = Astro.props;
 
 <script>
   function openModal(modal: HTMLElement) {
+    const panel = modal.querySelector<HTMLElement>("[data-modal-panel]");
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
+
+    // Force layout so the browser registers the starting state before
+    // removing it, otherwise the opacity/scale transition never runs.
+    modal.getBoundingClientRect();
+    requestAnimationFrame(() => {
+      modal.classList.remove("opacity-0");
+      panel?.classList.remove("opacity-0", "scale-95");
+    });
+
     (modal.querySelector("[data-modal-close]") as HTMLElement | null)?.focus();
   }
 
   function closeModal(modal: HTMLElement) {
-    modal.classList.add("hidden");
+    const panel = modal.querySelector<HTMLElement>("[data-modal-panel]");
+    modal.classList.add("opacity-0");
+    panel?.classList.add("opacity-0", "scale-95");
     document.body.style.overflow = "";
+
+    const hide = (event?: TransitionEvent) => {
+      if (event && (event.target !== modal || event.propertyName !== "opacity")) return;
+      modal.classList.add("hidden");
+      modal.removeEventListener("transitionend", hide);
+    };
+    modal.addEventListener("transitionend", hide);
+    // Fallback in case the transitionend event doesn't fire (e.g. reduced motion).
+    setTimeout(hide, 300);
   }
 
   document.querySelectorAll<HTMLElement>("[data-modal-target]").forEach((trigger) => {

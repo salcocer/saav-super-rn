@@ -10,12 +10,13 @@ const { id, class: className } = Astro.props;
 <div
   id={id}
   data-modal
-  class="modal-overlay hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+  class="modal-overlay hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300 ease-out"
 >
   <div
     role="dialog"
     aria-modal="true"
-    class={`relative w-full max-w-lg max-h-[85vh] overflow-y-auto bg-black/20 backdrop-blur-lg rounded-lg shadow-2xl text-white border border-transparent ${className ?? ""}`}
+    data-modal-panel
+    class={`modal-panel relative w-full max-w-lg max-h-[85vh] overflow-y-auto bg-black/20 backdrop-blur-lg rounded-lg shadow-2xl text-white border border-transparent scale-95 opacity-0 transition-all duration-300 ease-out ${className ?? ""}`}
   >
     <button
       type="button"
