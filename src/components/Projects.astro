@@ -4,7 +4,7 @@ import Modal from "./Modal.astro";
 ---
 
 <div
-  class="w-[400px] lg:w-[280px] lg:h-[405px] lg:mt-[25px] bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 text-white max-w-lg mx-auto flex-col items-start border border-transparent hover:border-gray-400 transition cursor-pointer"
+  class="w-[394px] lg:w-[274px] lg:h-[399px] bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 text-white max-w-lg mx-auto flex-col items-start border border-transparent hover:border-gray-400 transition cursor-pointer"
   data-modal-target="projects-modal"
   role="button"
   tabindex="0"
@@ -13,7 +13,7 @@ import Modal from "./Modal.astro";
   <div
     class="p-6 bg-black/10 backdrop-blur-lg h-1 flex items-center rounded-t-lg"
   >
-    <h2 class="text-lg font-semibold text-white">Projects</h2>
+    <h2 class="text-base font-semibold text-white">Projects</h2>
   </div>
   <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4 justify-center">
     <div class="flex flex-col items-center p-4 rounded-lg">
@@ -22,7 +22,7 @@ import Modal from "./Modal.astro";
         src="calendar.png"
         title="Expo + React Native App"
       />
-      <p>Memento</p>
+      <p class="text-sm">Memento</p>
     </div>
     <div class="flex flex-col items-center p-4 rounded-lg">
       <IconApp
@@ -30,7 +30,7 @@ import Modal from "./Modal.astro";
         src="trivial.png"
         title="React Native App"
       />
-      <p>Trivial</p>
+      <p class="text-sm">Trivial</p>
     </div>
     <div class="flex flex-col items-center p-4 rounded-lg">
       <IconApp
@@ -38,7 +38,7 @@ import Modal from "./Modal.astro";
         src="logo.png"
         title="Football Academy"
       />
-      <p>TP_Academy</p>
+      <p class="text-sm">TP_Academy</p>
     </div>
     <div class="flex flex-col items-center p-4 rounded-lg">
       <IconApp
@@ -46,7 +46,7 @@ import Modal from "./Modal.astro";
         src="taxi.png"
         title="TaxiMap"
       />
-      <p>TaxiMap</p>
+      <p class="text-sm">TaxiMap</p>
     </div>
   </div>
 </div>
