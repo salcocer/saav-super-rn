@@ -53,5 +53,62 @@ import Modal from "./Modal.astro";
     <IconApp src="springboot.png" title="spring_boot" />
     <!-- <IconApp src="php.png" title="php" /> -->
   </div>
-  <!-- Add more details here (proficiency level, years used, etc.) -->
+  <div class="px-6 pb-6 flex flex-col gap-4">
+    {
+      [
+        {
+          label: "Mobile",
+          items: [
+            "React",
+            "React Native",
+            "Expo",
+            "Detox",
+            "React Navigation",
+            "Zustand",
+            "Redux",
+            "React Native Paper",
+            "TypeScript",
+            "JavaScript",
+            "Swift",
+          ],
+        },
+        {
+          label: "Backend",
+          items: ["Java", "Spring Boot", "JPA", "Maven", "Microservices"],
+        },
+        { label: "Databases", items: ["PostgreSQL", "MongoDB"] },
+        { label: "DevOps", items: ["Docker", "GitHub Actions & CI/CD"] },
+        {
+          label: "Testing",
+          items: ["Detox", "Cypress", "Vitest", "Mockito"],
+        },
+        {
+          label: "Architecture",
+          items: ["Microservices", "RESTful APIs"],
+        },
+        { label: "Methodologies", items: ["Agile", "Scrum"] },
+        {
+          label: "Tools",
+          items: [
+            "VS Code",
+            "Eclipse",
+            "IntelliJ IDEA",
+            "Xcode",
+            "Copilot",
+          ],
+        },
+      ].map((group) => (
+        <div>
+          <p class="text-sm font-semibold text-white">{group.label}</p>
+          <div class="flex flex-wrap gap-2 mt-1.5">
+            {group.items.map((item) => (
+              <span class="bg-white/10 text-white text-xs px-2 py-1 rounded">
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
 </Modal>
