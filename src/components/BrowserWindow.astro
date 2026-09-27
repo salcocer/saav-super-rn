@@ -1,13 +1,25 @@
 ---
 interface Props {
   id: string;
-  url: string;
+  /** Opened by the green button. Without it, green maximizes the window. */
+  url?: string;
+  /** Text in the address bar; defaults to the url. */
+  address?: string;
+  /** Panel sizing classes. */
+  size?: string;
   class?: string;
 }
 
-const { id, url, class: className } = Astro.props;
-const shownUrl = url.replace(/^(https?:\/\/|mailto:)/, "").replace(/\/$/, "");
-const isMail = url.startsWith("mailto:");
+const {
+  id,
+  url,
+  address,
+  size = "max-w-[1000px] h-[85vh]",
+  class: className,
+} = Astro.props;
+const shownUrl =
+  address ?? url?.replace(/^(https?:\/\/|mailto:)/, "").replace(/\/$/, "") ?? "";
+const isMail = url?.startsWith("mailto:");
 ---
 
 <div
@@ -20,7 +32,7 @@ const isMail = url.startsWith("mailto:");
     aria-modal="true"
     aria-label={shownUrl}
     data-modal-panel
-    class="relative w-full max-w-[1000px] h-[85vh] flex flex-col overflow-hidden rounded-xl shadow-2xl border border-white/10 bg-neutral-900 text-white scale-95 opacity-0 transition-all duration-300 ease-out"
+    class={`relative w-full ${size} flex flex-col overflow-hidden rounded-xl shadow-2xl border border-white/10 bg-neutral-900 text-white scale-95 opacity-0 transition-all duration-300 ease-out`}
   >
     <div
       class="traffic-bar relative flex items-center h-11 px-4 shrink-0 bg-neutral-800 border-b border-black/50"
@@ -35,19 +47,35 @@ const isMail = url.startsWith("mailto:");
         >
         <button
           type="button"
-          data-modal-close
+          data-modal-minimize
           aria-label="Minimize"
           title="Minimize"
           class="traffic-light bg-[#febc2e]"><span>−</span></button
         >
-        <a
-          href={url}
-          target={isMail ? undefined : "_blank"}
-          rel="noopener noreferrer"
-          aria-label="Open in new tab"
-          title="Open in new tab"
-          class="traffic-light bg-[#28c840]"><span>+</span></a
-        >
+        {
+          url ? (
+            <a
+              href={url}
+              target={isMail ? undefined : "_blank"}
+              rel="noopener noreferrer"
+              aria-label="Open in new tab"
+              title="Open in new tab"
+              class="traffic-light bg-[#28c840]"
+            >
+              <span>+</span>
+            </a>
+          ) : (
+            <button
+              type="button"
+              data-window-maximize
+              aria-label="Maximize"
+              title="Maximize"
+              class="traffic-light bg-[#28c840]"
+            >
+              <span>+</span>
+            </button>
+          )
+        }
       </div>
       <div class="absolute inset-0 flex items-center justify-center px-24">
         <div
@@ -57,7 +85,7 @@ const isMail = url.startsWith("mailto:");
         </div>
       </div>
     </div>
-    <div class={`flex-1 overflow-auto ${className ?? ""}`}>
+    <div class={`flex-1 min-h-0 overflow-auto ${className ?? ""}`}>
       <slot />
     </div>
   </div>
@@ -66,6 +94,12 @@ const isMail = url.startsWith("mailto:");
 <style>
   .modal-overlay:not(.hidden) {
     display: flex;
+  }
+
+  [data-modal-panel][data-maximized] {
+    max-width: none;
+    height: 100%;
+    max-height: none;
   }
 
   .traffic-light {
@@ -92,3 +126,25 @@ const isMail = url.startsWith("mailto:");
     opacity: 1;
   }
 </style>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-window-maximize]")
+    .forEach((button) => {
+      const modal = button.closest<HTMLElement>("[data-modal]");
+      const panel = modal?.querySelector<HTMLElement>("[data-modal-panel]");
+      if (!modal || !panel) return;
+
+      const setMaximized = (maximized: boolean) => {
+        panel.toggleAttribute("data-maximized", maximized);
+        const label = maximized ? "Restore" : "Maximize";
+        button.setAttribute("aria-label", label);
+        button.title = label;
+      };
+
+      button.addEventListener("click", () =>
+        setMaximized(!panel.hasAttribute("data-maximized")),
+      );
+      modal.addEventListener("modal:open", () => setMaximized(false));
+    });
+</script>

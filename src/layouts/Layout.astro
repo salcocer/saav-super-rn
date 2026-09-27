@@ -42,7 +42,16 @@ const { description, title } = Astro.props;
 </script>
 
 <script>
-  function openModal(modal: HTMLElement) {
+  // The element that opened each modal; minimize animates back into it.
+  const openers = new WeakMap<HTMLElement, HTMLElement>();
+  // Running minimize animations, so reopening mid-minimize can cancel them.
+  const minimizing = new WeakMap<HTMLElement, Animation[]>();
+
+  function openModal(modal: HTMLElement, trigger: HTMLElement) {
+    minimizing.get(modal)?.forEach((animation) => animation.cancel());
+    minimizing.delete(modal);
+    modal.style.pointerEvents = "";
+    openers.set(modal, trigger);
     const panel = modal.querySelector<HTMLElement>("[data-modal-panel]");
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
@@ -73,6 +82,105 @@ const { description, title } = Astro.props;
     setTimeout(hide, 300);
   }
 
+  // Keyframes for a macOS-style "genie": the edge nearest the target pinches
+  // into a funnel, the far edge follows, and the window slides into the target.
+  // Sampled with linear segments so the motion never stalls between stages.
+  function genieKeyframes(from: DOMRect, to: DOMRect): Keyframe[] {
+    const clamp = (value: number) => Math.min(Math.max(value, 0), 1);
+    const easeOut = (t: number) => 1 - (1 - t) ** 3;
+    const easeInOut = (t: number) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
+
+    const toX = to.left + to.width / 2;
+    const toY = to.top + to.height / 2;
+    const down = toY >= from.top + from.height / 2;
+    // Where the funnel points along the leading edge (0 = left, 1 = right).
+    const fx = clamp((toX - from.left) / from.width);
+    const dx = toX - (from.left + fx * from.width);
+    const dy = toY - (down ? from.bottom : from.top);
+    const funnelWidth = 0.2;
+    // Shrink to a small point (~16px) at the target before fading out.
+    const endSize = Math.min(to.width, to.height, 40) * 0.4;
+    const sx = Math.min(endSize / (from.width * funnelWidth), 1);
+    const sy = Math.min(endSize / from.height, 1);
+
+    const edge = (progress: number) => {
+      const width = 1 - (1 - funnelWidth) * progress;
+      const center = 0.5 + (fx - 0.5) * progress;
+      return [clamp(center - width / 2) * 100, clamp(center + width / 2) * 100];
+    };
+
+    const steps = 20;
+    return Array.from({ length: steps + 1 }, (_, i) => {
+      const t = i / steps;
+      const [leadL, leadR] = edge(easeOut(clamp(t / 0.55)));
+      const [trailL, trailR] = edge(easeInOut(clamp((t - 0.15) / 0.7)));
+      const [topL, topR] = down ? [trailL, trailR] : [leadL, leadR];
+      const [bottomL, bottomR] = down ? [leadL, leadR] : [trailL, trailR];
+      const move = t * t;
+      // Shrinking runs slightly ahead of the slide so it's small when it lands.
+      const shrink = t ** 1.5;
+      return {
+        transformOrigin: `${fx * 100}% ${down ? 100 : 0}%`,
+        transform: `translate(${dx * move}px, ${dy * move}px) scale(${1 + (sx - 1) * shrink}, ${1 + (sy - 1) * shrink})`,
+        clipPath: `polygon(${topL}% 0%, ${topR}% 0%, ${bottomR}% 100%, ${bottomL}% 100%)`,
+        opacity: t < 0.92 ? 1 : 1 - (t - 0.92) / 0.08,
+      };
+    });
+  }
+
+  // Minimize: the window gets pulled into the card or icon that opened it.
+  function minimizeModal(modal: HTMLElement) {
+    const panel = modal.querySelector<HTMLElement>("[data-modal-panel]");
+    const target = openers.get(modal);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!panel || reduceMotion || minimizing.has(modal)) return closeModal(modal);
+
+    const targetRect = target?.getBoundingClientRect();
+    const hasTarget = !!targetRect && targetRect.width > 0 && targetRect.height > 0;
+    // No visible opener: shrink toward the bottom of the screen, like the Dock.
+    const to = hasTarget
+      ? targetRect
+      : new DOMRect(window.innerWidth / 2 - 20, window.innerHeight - 40, 40, 40);
+    const duration = 420;
+
+    modal.style.pointerEvents = "none";
+    document.body.style.overflow = "";
+
+    const genie = panel.animate(genieKeyframes(panel.getBoundingClientRect(), to), {
+      duration,
+      fill: "forwards",
+    });
+    const backdrop = modal.animate(
+      [
+        { backgroundColor: "rgb(0 0 0 / 0.6)", backdropFilter: "blur(4px)" },
+        { backgroundColor: "rgb(0 0 0 / 0)", backdropFilter: "blur(0px)" },
+      ],
+      { duration, easing: "ease-out", fill: "forwards" },
+    );
+
+    minimizing.set(modal, [genie, backdrop]);
+
+    genie.finished.then(() => {
+      minimizing.delete(modal);
+      // Reset to the closed state before dropping the animations so nothing flashes.
+      modal.classList.add("hidden", "opacity-0");
+      panel.classList.add("opacity-0", "scale-95");
+      modal.style.pointerEvents = "";
+      genie.cancel();
+      backdrop.cancel();
+
+      // Little "landed in the dock" bounce on the card/icon.
+      if (hasTarget) {
+        target!.animate(
+          [{ transform: "scale(1)" }, { transform: "scale(1.06)" }, { transform: "scale(1)" }],
+          { duration: 220, easing: "ease-out" },
+        );
+      }
+    }, () => {
+      // Cancelled because the modal was reopened mid-minimize.
+    });
+  }
+
   document.querySelectorAll<HTMLElement>("[data-modal-target]").forEach((trigger) => {
     const targetId = trigger.getAttribute("data-modal-target");
     const modal = targetId ? document.getElementById(targetId) : null;
@@ -83,13 +191,13 @@ const { description, title } = Astro.props;
       if (clickedInsideNestedLink && clickedInsideNestedLink !== trigger) return;
       // Triggers can be real links so they still work without JS.
       event.preventDefault();
-      openModal(modal);
+      openModal(modal, trigger);
     });
 
     trigger.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        openModal(modal);
+        openModal(modal, trigger);
       }
     });
   });
@@ -101,6 +209,10 @@ const { description, title } = Astro.props;
 
     modal.querySelectorAll("[data-modal-close]").forEach((button) => {
       button.addEventListener("click", () => closeModal(modal));
+    });
+
+    modal.querySelectorAll("[data-modal-minimize]").forEach((button) => {
+      button.addEventListener("click", () => minimizeModal(modal));
     });
   });
 

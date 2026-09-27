@@ -1,37 +1,20 @@
 ---
+import BrowserWindow from "./BrowserWindow.astro";
+
 interface Props {
   id: string;
+  /** Panel width; defaults to max-w-[752px]. */
   class?: string;
 }
 
 const { id, class: className } = Astro.props;
+const path = id.replace(/-modal$/, "");
 ---
 
-<div
+<BrowserWindow
   id={id}
-  data-modal
-  class="modal-overlay hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300 ease-out"
+  address={`saav-super.onrender.com/${path}`}
+  size={`${className ?? "max-w-[752px]"} max-h-[85vh]`}
 >
-  <div
-    role="dialog"
-    aria-modal="true"
-    data-modal-panel
-    class={`modal-panel relative w-full max-w-[752px] max-h-[85vh] overflow-y-auto bg-black/20 backdrop-blur-lg rounded-lg shadow-2xl text-white border border-transparent scale-95 opacity-0 transition-all duration-300 ease-out ${className ?? ""}`}
-  >
-    <button
-      type="button"
-      data-modal-close
-      aria-label="Close"
-      class="absolute top-1 right-3 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition text-lg leading-none"
-    >
-      &times;
-    </button>
-    <slot />
-  </div>
-</div>
-
-<style>
-  .modal-overlay:not(.hidden) {
-    display: flex;
-  }
-</style>
+  <slot />
+</BrowserWindow>
