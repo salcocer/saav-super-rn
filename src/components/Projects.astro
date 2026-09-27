@@ -8,24 +8,48 @@ const projects = [
     tagline: "Expo + React Native App",
     icon: "calendar.png",
     href: "https://github.com/TutoryOrg/JWService",
+    description:
+      "One codebase shipping to Android, iOS, and Web with Expo + React Native, backed by a real Figma-to-code design workflow, Storybook for component review, and i18n baked in from the start.",
   },
   {
     title: "Trivial",
     tagline: "React Native App",
     icon: "trivial.png",
     href: "https://github.com/TutoryOrg/JWTrivial",
+    description:
+      "A full-stack trivia game split into a dedicated backend (jwback) and React Native client (jwgame), taken all the way from Figma mockups and data-flow diagrams to a working iOS build.",
   },
   {
     title: "TP_Academy",
     tagline: "Football Academy",
     icon: "logo.png",
-    href: "https://phuketacademy.onrender.com/",
+    href: "https://github.com/TutoryOrg/phuketacademy",
+    description:
+      "Marketing site for a football academy in Phuket, built with Astro and Tailwind CSS for a fast, mostly-static site with minimal JS shipped to the browser.",
   },
   {
     title: "TaxiMap",
     tagline: "React Native Maps",
     icon: "taxi.png",
     href: "https://github.com/salcocer/react-native-maps",
+    description:
+      "A taxi-booking concept centered on Madrid, exploring react-native-maps for interactive maps and location-based UX in an Expo + TypeScript app.",
+  },
+  {
+    title: "CrashBombs",
+    tagline: "React Native + Expo Game",
+    icon: "expo.png",
+    href: "https://github.com/TutoryOrg/CrashBombs",
+    description:
+      "An arcade game built with React Native + Expo, with Supabase-backed sign in/sign up (email & Google, Apple ID in progress), a custom game engine, and a companion marketing website.",
+  },
+  {
+    title: "OnlyChat",
+    tagline: "Chat App",
+    icon: "typescript.png",
+    href: "https://github.com/salcocer/ig_api_project",
+    description:
+      "A distraction-free chat app for staying connected without the social-media rabbit hole — chat backend, a Chrome extension, and a Next.js website in one repo.",
   },
 ];
 ---
@@ -61,7 +85,7 @@ const projects = [
     </div>
     <div class="flex flex-col items-center p-4 rounded-lg">
       <IconApp
-        href="https://phuketacademy.onrender.com/"
+        href="https://github.com/TutoryOrg/phuketacademy"
         src="logo.png"
         title="Football Academy"
       />
@@ -75,6 +99,25 @@ const projects = [
       />
       <p class="text-sm">TaxiMap</p>
     </div>
+    <div>
+      <p class="text-2xl ml-6">...</p>
+    </div>
+    <!-- <div class="flex flex-col items-center p-4 rounded-lg">
+      <IconApp
+        href="https://github.com/TutoryOrg/CrashBombs"
+        src="expo.png"
+        title="React Native + Expo Game"
+      />
+      <p class="text-sm">CrashBombs</p>
+    </div>
+    <div class="flex flex-col items-center p-4 rounded-lg">
+      <IconApp
+        href="https://github.com/salcocer/ig_api_project"
+        src="typescript.png"
+        title="Chat App"
+      />
+      <p class="text-sm">OnlyChat</p>
+    </div> -->
   </div>
 </div>
 
@@ -109,10 +152,7 @@ const projects = [
                     {project.title}
                   </h3>
                   <p class="text-sm text-white/60 italic">{project.tagline}</p>
-                  <p class="text-sm text-gray-300">
-                    Placeholder description for {project.title}. Add an
-                    overview, tech stack, and highlights for this project here.
-                  </p>
+                  <p class="text-sm text-gray-300">{project.description}</p>
                   <a
                     href={project.href}
                     target="_blank"
