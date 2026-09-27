@@ -82,7 +82,7 @@ const projects = [
   <div
     class="p-6 bg-black/10 backdrop-blur-lg h-1 flex items-center rounded-t-lg"
   >
-    <h2 class="text-lg font-semibold text-white">Projects</h2>
+    <h2 class="text-xl mt-4 font-semibold text-white">Projects</h2>
   </div>
   <div class="p-6" data-carousel>
     <div class="relative px-14">
@@ -108,13 +108,10 @@ const projects = [
                   <h3 class="text-lg font-semibold text-white">
                     {project.title}
                   </h3>
-                  <p class="text-sm text-white/60 italic">
-                    {project.tagline}
-                  </p>
+                  <p class="text-sm text-white/60 italic">{project.tagline}</p>
                   <p class="text-sm text-gray-300">
                     Placeholder description for {project.title}. Add an
-                    overview, tech stack, and highlights for this project
-                    here.
+                    overview, tech stack, and highlights for this project here.
                   </p>
                   <a
                     href={project.href}
@@ -159,38 +156,46 @@ const projects = [
 </Modal>
 
 <script>
-  document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((carousel) => {
-    const track = carousel.querySelector<HTMLElement>("[data-carousel-track]");
-    if (!track) return;
-    const slides = Array.from(track.children) as HTMLElement[];
-    const prevBtn = carousel.querySelector<HTMLElement>("[data-carousel-prev]");
-    const nextBtn = carousel.querySelector<HTMLElement>("[data-carousel-next]");
-    const dots = Array.from(
-      carousel.querySelectorAll<HTMLElement>("[data-carousel-dot]")
-    );
-    let index = 0;
+  document
+    .querySelectorAll<HTMLElement>("[data-carousel]")
+    .forEach((carousel) => {
+      const track = carousel.querySelector<HTMLElement>(
+        "[data-carousel-track]",
+      );
+      if (!track) return;
+      const slides = Array.from(track.children) as HTMLElement[];
+      const prevBtn = carousel.querySelector<HTMLElement>(
+        "[data-carousel-prev]",
+      );
+      const nextBtn = carousel.querySelector<HTMLElement>(
+        "[data-carousel-next]",
+      );
+      const dots = Array.from(
+        carousel.querySelectorAll<HTMLElement>("[data-carousel-dot]"),
+      );
+      let index = 0;
 
-    function update() {
-      track!.style.transform = `translateX(-${index * 100}%)`;
-      dots.forEach((dot, i) => {
-        dot.classList.toggle("bg-white", i === index);
-        dot.classList.toggle("bg-white/30", i !== index);
-      });
-    }
+      function update() {
+        track!.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach((dot, i) => {
+          dot.classList.toggle("bg-white", i === index);
+          dot.classList.toggle("bg-white/30", i !== index);
+        });
+      }
 
-    prevBtn?.addEventListener("click", () => {
-      index = (index - 1 + slides.length) % slides.length;
-      update();
-    });
-    nextBtn?.addEventListener("click", () => {
-      index = (index + 1) % slides.length;
-      update();
-    });
-    dots.forEach((dot, i) => {
-      dot.addEventListener("click", () => {
-        index = i;
+      prevBtn?.addEventListener("click", () => {
+        index = (index - 1 + slides.length) % slides.length;
         update();
       });
+      nextBtn?.addEventListener("click", () => {
+        index = (index + 1) % slides.length;
+        update();
+      });
+      dots.forEach((dot, i) => {
+        dot.addEventListener("click", () => {
+          index = i;
+          update();
+        });
+      });
     });
-  });
 </script>
