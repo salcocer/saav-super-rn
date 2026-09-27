@@ -1,0 +1,118 @@
+---
+import BrowserWindow from "./BrowserWindow.astro";
+
+interface Props {
+  id: string;
+  url: string;
+}
+
+const { id, url } = Astro.props;
+
+const experience = [
+  {
+    role: "Mobile Developer",
+    company: "T-Systems",
+    location: "Barcelona",
+    dates: "May 2022 - Present",
+  },
+  {
+    role: "FrontEnd Developer",
+    company: "Idrica",
+    location: "Valencia",
+    dates: "April 2021 - May 2022",
+  },
+  {
+    role: "Mobile Developer",
+    company: "Pccom",
+    location: "Alicante",
+    dates: "March 2019 - May 2021",
+  },
+];
+
+const education = [
+  { title: "Bachelor of Science and Technology", school: "IES Monduver, Valencia" },
+  {
+    title: "Tech. Automation and Industrial Robotics",
+    school: "IES Jaume I, Valencia",
+  },
+];
+---
+
+<BrowserWindow id={id} url={url} class="bg-[#f4f2ee] text-black/90">
+  <div class="mx-auto max-w-3xl p-4 sm:p-6 flex flex-col gap-3">
+    <section class="overflow-hidden rounded-lg bg-white border border-black/10">
+      <div class="h-28 sm:h-36 bg-gradient-to-r from-[#278d98] to-[#0a66c2]"></div>
+      <div class="px-6 pb-6">
+        <img
+          src="profile.jpeg"
+          alt="Alejandro Alcocer"
+          class="-mt-16 w-32 h-32 rounded-full border-4 border-white object-cover"
+        />
+        <h3 class="mt-3 text-2xl font-semibold">Alejandro Alcocer</h3>
+        <p class="mt-1 text-base">
+          Mobile & Frontend Developer · React Native · React · Expo · TypeScript
+        </p>
+        <p class="mt-1 text-sm text-black/60">
+          Spain · <span class="font-semibold text-[#0a66c2]">Contact info</span>
+        </p>
+        <div class="mt-4 flex gap-2">
+          <span
+            class="rounded-full bg-[#0a66c2] px-4 py-1.5 text-sm font-semibold text-white"
+            >Connect</span
+          >
+          <span
+            class="rounded-full border border-[#0a66c2] px-4 py-1.5 text-sm font-semibold text-[#0a66c2]"
+            >Message</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-white border border-black/10 p-6">
+      <h4 class="text-xl font-semibold">About</h4>
+      <p class="mt-3 text-sm text-pretty">
+        Mobile & Frontend Developer with 5+ years of experience building scalable
+        mobile and web applications using React Native, React, and Expo. Skilled
+        in TypeScript, APIs, Microservices, PostgreSql, MongoDB & Docker.
+        Experienced in developing responsive UI/UX, integrating backend services,
+        and working in Agile & Scrum environments.
+      </p>
+    </section>
+
+    <section class="rounded-lg bg-white border border-black/10 p-6">
+      <h4 class="text-xl font-semibold">Experience</h4>
+      <ul class="mt-2 divide-y divide-black/10">
+        {
+          experience.map((job) => (
+            <li class="flex gap-3 py-3">
+              <span class="flex w-12 h-12 shrink-0 items-center justify-center rounded bg-black/5 text-lg font-semibold text-black/50">
+                {job.company[0]}
+              </span>
+              <span class="flex flex-col">
+                <span class="text-sm font-semibold">{job.role}</span>
+                <span class="text-sm">{job.company}</span>
+                <span class="text-xs text-black/60">
+                  {job.dates} · {job.location}, Spain
+                </span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="rounded-lg bg-white border border-black/10 p-6">
+      <h4 class="text-xl font-semibold">Education</h4>
+      <ul class="mt-2 divide-y divide-black/10">
+        {
+          education.map((item) => (
+            <li class="flex flex-col py-3">
+              <span class="text-sm font-semibold">{item.school}</span>
+              <span class="text-sm">{item.title}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BrowserWindow>

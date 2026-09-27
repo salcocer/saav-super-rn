@@ -1,0 +1,60 @@
+---
+import BrowserWindow from "./BrowserWindow.astro";
+
+interface Props {
+  id: string;
+  email: string;
+}
+
+const { id, email } = Astro.props;
+---
+
+<BrowserWindow id={id} url={`mailto:${email}`} class="bg-neutral-900">
+  <form data-email-preview data-email={email} class="h-full flex flex-col text-sm">
+    <div class="flex items-center gap-3 px-6 py-3 border-b border-white/10">
+      <span class="w-16 text-white/50">To:</span>
+      <span class="rounded-full bg-[#0a84ff]/20 px-3 py-0.5 text-[#64a8ff]"
+        >{email}</span
+      >
+    </div>
+    <label class="flex items-center gap-3 px-6 py-3 border-b border-white/10">
+      <span class="w-16 text-white/50">Subject:</span>
+      <input
+        name="subject"
+        class="flex-1 bg-transparent outline-none placeholder:text-white/30"
+        placeholder="Let's work together"
+      />
+    </label>
+    <textarea
+      name="body"
+      aria-label="Message"
+      class="flex-1 min-h-[200px] resize-none bg-transparent px-6 py-4 outline-none placeholder:text-white/30"
+      placeholder="Hi Alejandro, …"></textarea>
+    <div class="flex justify-end px-6 py-4 border-t border-white/10">
+      <button
+        type="submit"
+        class="rounded-md bg-[#0a84ff] px-5 py-2 font-semibold text-white hover:bg-[#0a84ff]/85 transition"
+      >
+        Send
+      </button>
+    </div>
+  </form>
+</BrowserWindow>
+
+<script>
+  document
+    .querySelectorAll<HTMLFormElement>("[data-email-preview]")
+    .forEach((form) => {
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        const params = new URLSearchParams({
+          subject: String(data.get("subject") ?? ""),
+          body: String(data.get("body") ?? ""),
+        });
+        // mailto expects %20 for spaces, not "+".
+        const query = params.toString().replace(/\+/g, "%20");
+        window.location.href = `mailto:${form.dataset.email}?${query}`;
+      });
+    });
+</script>

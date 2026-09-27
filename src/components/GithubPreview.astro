@@ -1,0 +1,173 @@
+---
+import BrowserWindow from "./BrowserWindow.astro";
+
+interface Props {
+  id: string;
+  user: string;
+}
+
+const { id, user } = Astro.props;
+---
+
+<BrowserWindow id={id} url={`https://github.com/${user}`} class="bg-[#0d1117]">
+  <div data-github-preview data-user={user} class="p-6 sm:p-8">
+    <p data-github-status class="text-sm text-white/60">Loading profile…</p>
+
+    <div data-github-content class="hidden flex-col md:flex-row gap-8">
+      <aside class="md:w-60 shrink-0">
+        <img
+          data-github-avatar
+          alt=""
+          class="w-32 h-32 md:w-full md:h-auto rounded-full border border-white/10"
+        />
+        <h3 data-github-name class="mt-4 text-2xl font-semibold"></h3>
+        <p data-github-login class="text-lg text-white/50"></p>
+        <p data-github-bio class="mt-3 text-sm text-white/80"></p>
+        <p class="mt-3 text-sm text-white/60">
+          <span data-github-followers class="text-white font-semibold"></span> followers
+          · <span data-github-following class="text-white font-semibold"></span> following
+        </p>
+      </aside>
+
+      <section class="flex-1 min-w-0">
+        <h4 class="text-base">
+          Recent repositories
+          <span
+            data-github-repo-count
+            class="ml-1 rounded-full bg-white/10 px-2 py-0.5 text-xs"></span>
+        </h4>
+        <ul data-github-repos class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <template data-github-repo-template>
+    <li>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex h-full flex-col rounded-md border border-white/15 p-4 hover:border-white/40 transition"
+      >
+        <span class="flex items-center gap-2">
+          <span data-repo-name class="text-sm font-semibold text-[#4493f8] truncate"
+          ></span>
+          <span
+            class="rounded-full border border-white/20 px-2 text-[10px] text-white/60"
+            >Public</span
+          >
+        </span>
+        <span data-repo-description class="mt-2 flex-1 text-xs text-white/60"
+        ></span>
+        <span class="mt-3 flex items-center gap-4 text-xs text-white/60">
+          <span data-repo-language class="flex items-center gap-1.5">
+            <span data-repo-language-dot class="w-3 h-3 rounded-full"></span>
+            <span data-repo-language-name></span>
+          </span>
+          <span data-repo-stars></span>
+        </span>
+      </a>
+    </li>
+  </template>
+</BrowserWindow>
+
+<script>
+  interface GithubUser {
+    avatar_url: string;
+    name: string | null;
+    login: string;
+    bio: string | null;
+    followers: number;
+    following: number;
+    public_repos: number;
+  }
+
+  interface GithubRepo {
+    name: string;
+    html_url: string;
+    description: string | null;
+    language: string | null;
+    stargazers_count: number;
+  }
+
+  const languageColors: Record<string, string> = {
+    TypeScript: "#3178c6",
+    JavaScript: "#f1e05a",
+    Java: "#b07219",
+    Swift: "#F05138",
+    Astro: "#ff5a03",
+    HTML: "#e34c26",
+    CSS: "#663399",
+    Python: "#3572A5",
+    Kotlin: "#A97BFF",
+    "C#": "#178600",
+  };
+
+  document
+    .querySelectorAll<HTMLElement>("[data-github-preview]")
+    .forEach((root) => {
+      const modal = root.closest<HTMLElement>("[data-modal]");
+      const user = root.dataset.user;
+      const status = root.querySelector<HTMLElement>("[data-github-status]")!;
+      const content = root.querySelector<HTMLElement>("[data-github-content]")!;
+      const template = modal?.querySelector<HTMLTemplateElement>(
+        "[data-github-repo-template]",
+      );
+      const field = (name: string) =>
+        root.querySelector<HTMLElement>(`[data-github-${name}]`)!;
+      let loaded = false;
+
+      modal?.addEventListener("modal:open", async () => {
+        if (loaded || !user || !template) return;
+        loaded = true;
+
+        try {
+          const [profileRes, reposRes] = await Promise.all([
+            fetch(`https://api.github.com/users/${user}`),
+            fetch(
+              `https://api.github.com/users/${user}/repos?sort=updated&per_page=6`,
+            ),
+          ]);
+          if (!profileRes.ok || !reposRes.ok) throw new Error("GitHub API error");
+          const profile: GithubUser = await profileRes.json();
+          const repos: GithubRepo[] = await reposRes.json();
+
+          (field("avatar") as HTMLImageElement).src = profile.avatar_url;
+          field("name").textContent = profile.name ?? profile.login;
+          field("login").textContent = profile.login;
+          field("bio").textContent = profile.bio ?? "";
+          field("followers").textContent = String(profile.followers);
+          field("following").textContent = String(profile.following);
+          field("repo-count").textContent = String(profile.public_repos);
+
+          const list = field("repos");
+          list.replaceChildren(
+            ...repos.map((repo) => {
+              const item = template.content.cloneNode(true) as DocumentFragment;
+              const q = (selector: string) =>
+                item.querySelector<HTMLElement>(`[data-repo-${selector}]`)!;
+              item.querySelector("a")!.href = repo.html_url;
+              q("name").textContent = repo.name;
+              q("description").textContent = repo.description ?? "";
+              if (repo.language) {
+                q("language-name").textContent = repo.language;
+                q("language-dot").style.backgroundColor =
+                  languageColors[repo.language] ?? "#8b949e";
+              } else {
+                q("language").remove();
+              }
+              q("stars").textContent = `★ ${repo.stargazers_count}`;
+              return item;
+            }),
+          );
+
+          status.classList.add("hidden");
+          content.classList.replace("hidden", "flex");
+        } catch {
+          loaded = false;
+          status.textContent =
+            "Couldn't load the GitHub preview. Use the green button to open it in a new tab.";
+        }
+      });
+    });
+</script>

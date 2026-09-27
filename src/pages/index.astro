@@ -1,13 +1,17 @@
 ---
 import AboutMe from "../components/AboutMe.astro";
-import DownloadCV from "../components/DownloadCV.astro";
+import BrowserWindow from "../components/BrowserWindow.astro";
 import Education from "../components/Education.astro";
+import EmailPreview from "../components/EmailPreview.astro";
 import Experience from "../components/Experience.astro";
+import GithubPreview from "../components/GithubPreview.astro";
+import LinkedinPreview from "../components/LinkedinPreview.astro";
 import Profile from "../components/Profile.astro";
 import Projects from "../components/Projects.astro";
 import SocialPill from "../components/SocialPill.astro";
 import Technologies from "../components/Technologies.astro";
 
+import Download from "../icons/Download.astro";
 import Email from "../icons/Email.astro";
 import Github from "../icons/Github.astro";
 import Linkedin from "../icons/Linkedin.astro";
@@ -57,21 +61,52 @@ import Layout from "../layouts/Layout.astro";
     <div
       class="mt-10 mx-auto p-4 w-full h-[72px] max-w-sm bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-4 transition-transform duration-300 text-white flex flex-row items-center justify-between border border-transparent hover:border-gray-500"
     >
-      <SocialPill href="https://github.com/salcocer" title="Github">
+      <SocialPill
+        href="https://github.com/salcocer"
+        title="Github"
+        data-modal-target="github-browser"
+        aria-haspopup="dialog"
+      >
         <Github class="w-8 h-8 sm:w-10 sm:h-10" />
       </SocialPill>
       <SocialPill
         href="https://www.linkedin.com/in/alejandro-alcocer-250b21262/"
         title="Linkedin"
+        data-modal-target="linkedin-browser"
+        aria-haspopup="dialog"
       >
         <Linkedin class="w-8 h-8 sm:w-10 sm:h-10" />
       </SocialPill>
-      <SocialPill href="mailto:alealcocer08@gmail.com" title="Email me">
+      <SocialPill
+        href="mailto:alealcocer08@gmail.com"
+        title="Email me"
+        data-modal-target="email-browser"
+        aria-haspopup="dialog"
+      >
         <Email class="w-8 h-8 sm:w-10 sm:h-10" />
       </SocialPill>
-      <SocialPill>
-        <DownloadCV class="w-8 h-8 sm:w-10 sm:h-10" fileUrl="AlejandroCV.pdf" />
+      <SocialPill
+        href="AlejandroCV.pdf"
+        title="Download CV"
+        data-modal-target="cv-browser"
+        aria-haspopup="dialog"
+      >
+        <Download class="w-8 h-8 sm:w-10 sm:h-10" />
       </SocialPill>
     </div>
+
+    <GithubPreview id="github-browser" user="salcocer" />
+    <LinkedinPreview
+      id="linkedin-browser"
+      url="https://www.linkedin.com/in/alejandro-alcocer-250b21262/"
+    />
+    <EmailPreview id="email-browser" email="alealcocer08@gmail.com" />
+    <BrowserWindow id="cv-browser" url="/AlejandroCV.pdf" class="bg-neutral-700">
+      <iframe
+        src="AlejandroCV.pdf"
+        title="Alejandro Alcocer CV"
+        loading="lazy"
+        class="w-full h-full"></iframe>
+    </BrowserWindow>
   </main>
 </Layout>
