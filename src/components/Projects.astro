@@ -1,5 +1,4 @@
 ---
-import IconApp from "./IconApp.astro";
 import Modal from "./Modal.astro";
 
 const projects = [
@@ -52,6 +51,9 @@ const projects = [
       "A distraction-free chat app for staying connected without the social-media rabbit hole — chat backend, a Chrome extension, and a Next.js website in one repo.",
   },
 ];
+
+// The card shows the first few; the rest are in the carousel behind "...".
+const cardProjects = projects.slice(0, 4);
 ---
 
 <div
@@ -67,57 +69,33 @@ const projects = [
     <h2 class="text-base font-semibold text-white">Projects</h2>
   </div>
   <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4 justify-center">
-    <div class="flex flex-col items-center p-4 rounded-lg">
-      <IconApp
-        href="https://github.com/TutoryOrg/JWService"
-        src="calendar.png"
-        title="Expo + React Native App"
-      />
-      <p class="text-sm">Memento</p>
-    </div>
-    <div class="flex flex-col items-center p-4 rounded-lg">
-      <IconApp
-        href="https://github.com/TutoryOrg/JWTrivial"
-        src="trivial.png"
-        title="React Native App"
-      />
-      <p class="text-sm">Trivial</p>
-    </div>
-    <div class="flex flex-col items-center p-4 rounded-lg">
-      <IconApp
-        href="https://github.com/TutoryOrg/phuketacademy"
-        src="logo.png"
-        title="Football Academy"
-      />
-      <p class="text-sm">TP_Academy</p>
-    </div>
-    <div class="flex flex-col items-center p-4 rounded-lg">
-      <IconApp
-        href="https://github.com/salcocer/react-native-maps"
-        src="taxi.png"
-        title="TaxiMap"
-      />
-      <p class="text-sm">TaxiMap</p>
-    </div>
-    <div>
-      <p class="text-2xl ml-6">...</p>
-    </div>
-    <!-- <div class="flex flex-col items-center p-4 rounded-lg">
-      <IconApp
-        href="https://github.com/TutoryOrg/CrashBombs"
-        src="expo.png"
-        title="React Native + Expo Game"
-      />
-      <p class="text-sm">CrashBombs</p>
-    </div>
-    <div class="flex flex-col items-center p-4 rounded-lg">
-      <IconApp
-        href="https://github.com/salcocer/ig_api_project"
-        src="typescript.png"
-        title="Chat App"
-      />
-      <p class="text-sm">OnlyChat</p>
-    </div> -->
+    {
+      cardProjects.map((project, i) => (
+        <button
+          type="button"
+          data-modal-target="projects-modal"
+          data-carousel-go={i}
+          aria-haspopup="dialog"
+          title={project.tagline}
+          class="flex flex-col items-center p-4 rounded-lg"
+        >
+          <span class="hover:scale-110 transition max-w-[110px]">
+            <img src={project.icon} alt="" />
+          </span>
+          <span class="text-sm">{project.title}</span>
+        </button>
+      ))
+    }
+    <button
+      type="button"
+      data-modal-target="projects-modal"
+      data-carousel-go={cardProjects.length}
+      aria-haspopup="dialog"
+      aria-label="More projects"
+      class="text-2xl text-left ml-6 w-fit"
+    >
+      ...
+    </button>
   </div>
 </div>
 
@@ -268,5 +246,18 @@ const projects = [
           update();
         });
       });
+
+      // Project icons on the card open the modal on their own slide.
+      const modalId = carousel.closest("[data-modal]")?.id;
+      document
+        .querySelectorAll<HTMLElement>(
+          `[data-modal-target="${modalId}"][data-carousel-go]`,
+        )
+        .forEach((button) => {
+          button.addEventListener("click", () => {
+            index = Number(button.dataset.carouselGo) % slides.length;
+            update();
+          });
+        });
     });
 </script>

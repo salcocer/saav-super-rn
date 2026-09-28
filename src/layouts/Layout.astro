@@ -195,9 +195,12 @@ const { description, title } = Astro.props;
     });
 
     trigger.addEventListener("keydown", (event) => {
+      // Let nested links/buttons handle their own keys.
+      if (event.target !== trigger) return;
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        openModal(modal, trigger);
+        // Go through click so any other click listeners on the trigger run too.
+        trigger.click();
       }
     });
   });
