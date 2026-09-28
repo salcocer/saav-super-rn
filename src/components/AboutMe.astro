@@ -3,7 +3,7 @@ import Modal from "./Modal.astro";
 ---
 
 <div
-  class="w-[394px] lg:w-fit lg:h-[438px] mx-auto bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 text-white flex-col items-start border border-transparent hover:border-gray-500 transition cursor-pointer"
+  class="w-full h-full lg:w-fit lg:h-[438px] max-lg:flex max-lg:items-stretch max-lg:overflow-hidden mx-auto bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 text-white flex-col items-start border border-transparent hover:border-gray-500 transition cursor-pointer"
   data-modal-target="about-me-modal"
   role="button"
   tabindex="0"
@@ -14,7 +14,10 @@ import Modal from "./Modal.astro";
   >
     <h2 class="text-base font-semibold text-white">About Me</h2>
   </div>
-  <p class="p-4 text-sm mt-2 text-white text-wrap text-pretty">
+  <!-- Below desktop the card has a fixed height: fade out whatever doesn't fit. -->
+  <p
+    class="p-4 text-sm mt-2 text-white text-wrap text-pretty max-lg:overflow-hidden max-lg:[mask-image:linear-gradient(to_bottom,black_70%,transparent)]"
+  >
     Mobile & Frontend Developer with 7+ years of experience building scalable
     mobile and web applications using React Native, React, and Expo. Skilled in
     TypeScript, APIs, Microservices, PostgreSql, MongoDB & Docker. Experienced

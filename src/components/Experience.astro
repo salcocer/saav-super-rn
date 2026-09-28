@@ -3,7 +3,7 @@ import Modal from "./Modal.astro";
 ---
 
 <div
-  class="mx-auto w-[594px] lg:w-[710px] h-fit lg:ml-[45px] bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-transform duration-300 text-white flex-col items-start border border-transparent hover:border-gray-500 transition cursor-pointer"
+  class="mx-auto w-full lg:w-[710px] h-full lg:h-fit lg:ml-[45px] max-lg:overflow-hidden bg-black/20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-transform duration-300 text-white flex-col items-start border border-transparent hover:border-gray-500 transition cursor-pointer"
   data-modal-target="experience-modal"
   role="button"
   tabindex="0"
@@ -14,18 +14,18 @@ import Modal from "./Modal.astro";
   >
     <h2 class="text-base font-semibold text-white">Experience</h2>
   </div>
-  <div class="p-6">
-    <div class="flex flex-row justify-between">
+  <div class="p-4 lg:p-6">
+    <div class="flex flex-col lg:flex-row lg:justify-between">
       <p class="text-sm text-white">
         · T-Systems, Barcelona - Mobile Developer
       </p>
       <p class="text-xs text-white italic">May 2022 - Present</p>
     </div>
-    <div class="flex flex-row justify-between mt-3">
+    <div class="flex flex-col lg:flex-row lg:justify-between mt-3">
       <p class="text-sm text-white">· Idrica, Valencia - FrontEnd Developer</p>
       <p class="text-xs text-white italic">April 2021 - May 2022</p>
     </div>
-    <div class="flex flex-row justify-between mt-3">
+    <div class="flex flex-col lg:flex-row lg:justify-between mt-3">
       <p class="text-sm text-white">· Pccom, Alicante - Mobile Developer</p>
       <p class="text-xs text-white italic">March 2019 - May 2021</p>
     </div>
