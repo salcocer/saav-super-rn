@@ -127,7 +127,8 @@ const projects = [
   >
     <h2 class="text-xl mt-4 font-semibold text-white">Projects</h2>
   </div>
-  <div class="p-6" data-carousel>
+  <!-- Carousel at normal size; a full list when the window is maximized. -->
+  <div class="p-6 group-data-[maximized]/window:hidden" data-carousel>
     <div class="relative px-14">
       <button
         type="button"
@@ -193,6 +194,36 @@ const projects = [
       }
     </div>
   </div>
+  <ul
+    class="hidden group-data-[maximized]/window:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 p-6"
+  >
+    {
+      projects.map((project) => (
+        <li class="flex flex-col gap-4 rounded-lg border border-white/10 bg-white/5 p-5 hover:border-white/30 transition">
+          <div class="flex items-center gap-4">
+            <img
+              src={project.icon}
+              alt={project.title}
+              class="w-16 h-16 shrink-0 rounded-lg object-cover bg-white/5 p-1.5"
+            />
+            <div class="flex flex-col gap-1">
+              <h3 class="text-lg font-semibold text-white">{project.title}</h3>
+              <p class="text-sm text-white/60 italic">{project.tagline}</p>
+            </div>
+          </div>
+          <p class="flex-1 text-sm text-gray-300">{project.description}</p>
+          <a
+            href={project.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm text-white underline underline-offset-2 hover:text-white/80 w-fit"
+          >
+            View project
+          </a>
+        </li>
+      ))
+    }
+  </ul>
 </Modal>
 
 <script>
